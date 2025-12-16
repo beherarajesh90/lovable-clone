@@ -1,5 +1,6 @@
 package com.codingshuttle.projects.lovable_clone.entity;
 
+import com.codingshuttle.projects.lovable_clone.enums.PreviewStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,15 +11,14 @@ import java.time.Instant;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-
+public class Preview {
     Long id;
-    String email;
-    String passwordHash;
-    String name;
-    String avatarUrl;
+    Project project;
+    String namespace;
+    String podName;
+    String previewUrl;
+    PreviewStatus previewStatus;
+    Instant startedAt;
+    Instant terminatedAt;
     Instant createdAt;
-    Instant updatedAt;
-    Instant deletedAt; //soft delete
-
 }
