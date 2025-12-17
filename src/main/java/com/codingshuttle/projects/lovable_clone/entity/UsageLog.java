@@ -9,7 +9,7 @@ public class UsageLog {
     User user;
     Project project;
     String action;
-    Integer tokenUsed;
+    Integer tokensUsed;
     Integer durationMs;
     String metaData; // JSON of {model_used, prompt_used}
     Instant createdAt;
