@@ -26,7 +26,8 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProjectResponse> getProjectById(@PathVariable Long id){
-        return ResponseEntity.ok(projectService.getUserProjectById(id));
+        Long userId = 1L;
+        return ResponseEntity.ok(projectService.getUserProjectById(id,userId));
     }
 
     @PostMapping
@@ -42,7 +43,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id, @RequestBody ProjectRequest request){
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id){
         Long userId = 1L;
         projectService.softDelete(id,userId);
         return ResponseEntity.noContent().build();

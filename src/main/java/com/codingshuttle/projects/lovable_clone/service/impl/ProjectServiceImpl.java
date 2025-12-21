@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -34,8 +35,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectResponse getUserProjectById(Long id) {
-        return null;
+    public ProjectResponse getUserProjectById(Long projectId, Long userId) {
+        Project project = getAccessibleProjectById(projectId, userId);
+        return projectMapper.toProjectResponse(project);
     }
 
     @Override
@@ -53,11 +55,30 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponse updateProject(Long projectId, ProjectRequest request, Long userId) {
-        return null;
+        Project project = getAccessibleProjectById(projectId, userId);
+
+        if (!project.getOwner().getId().equals(userId)){
+            throw new RuntimeException("You are not allowed to update the project");
+        }
+
+        project.setName(request.name());
+        Project updatedProject = projectRepository.save(project);
+        return projectMapper.toProjectResponse(project);
     }
 
     @Override
-    public void softDelete(Long id, Long userId) {
+    public void softDelete(Long projectId, Long userId) {
+        Project project = getAccessibleProjectById(projectId, userId);
 
+        if (!project.getOwner().getId().equals(userId)){
+            throw new RuntimeException("You are not allowed to delete the project");
+        }
+
+        project.setDeletedAt(Instant.now());
+        projectRepository.save(project);
+    }
+
+    private Project getAccessibleProjectById(Long projectId, Long userId) {
+        return projectRepository.findAccessibleProjectById(projectId, userId).orElseThrow();
     }
 }

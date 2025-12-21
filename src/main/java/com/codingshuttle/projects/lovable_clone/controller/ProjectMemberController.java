@@ -2,6 +2,7 @@ package com.codingshuttle.projects.lovable_clone.controller;
 
 import com.codingshuttle.projects.lovable_clone.dto.member.InviteMemberRequest;
 import com.codingshuttle.projects.lovable_clone.dto.member.MemberResponse;
+import com.codingshuttle.projects.lovable_clone.dto.member.UpdateMemberRoleRequest;
 import com.codingshuttle.projects.lovable_clone.entity.ProjectMember;
 import com.codingshuttle.projects.lovable_clone.service.ProjectMemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class ProjectMemberController {
     private final ProjectMemberService projectMemberService;
 
     @GetMapping
-    public ResponseEntity<List<ProjectMember>> getProjectMembers(@PathVariable Long projectId) {
+    public ResponseEntity<List<MemberResponse>> getProjectMembers(@PathVariable Long projectId) {
         Long userId = 1L;
         return ResponseEntity.ok(projectMemberService.getProjectMembers(projectId, userId));
     }
@@ -36,10 +37,20 @@ public class ProjectMemberController {
     public ResponseEntity<MemberResponse> updateMemberRole(
             @PathVariable Long projectId,
             @PathVariable Long memberId,
-            @RequestBody InviteMemberRequest request
+            @RequestBody UpdateMemberRoleRequest request
     ){
         Long userId = 1L;
         return ResponseEntity.ok(projectMemberService.updateProjectMember(projectId, memberId, request, userId));
+    }
+
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<Void> removeProjectMember(
+            @PathVariable Long projectId,
+            @PathVariable Long memberId
+    ){
+        Long userId = 1L;
+        projectMemberService.removeProjectMember(projectId, memberId, userId);
+        return ResponseEntity.noContent().build();
     }
 
 }
