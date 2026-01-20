@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 
 public record ApiError(
-        HttpStatus httpStatus,
+        HttpStatus status,
         String message,
         Instant timestamp,
         @JsonInclude(JsonInclude.Include.NON_NULL) List<ApiFieldError> errors
